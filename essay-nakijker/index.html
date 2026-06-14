@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#2f4f4f" />
+<title>Essaybundel Nakijker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
+<style>
+  :root{
+    --bg:#f4f1ea;
+    --card:#ffffff;
+    --ink:#2b2b2b;
+    --muted:#6b6b6b;
+    --accent:#c2683f;
+    --accent-soft:#f0d9cb;
+    --green:#3d6b53;
+    --green-soft:#dbe8df;
+    --amber:#b07d1a;
+    --amber-soft:#f5e8c8;
+    --red:#a8443a;
+    --red-soft:#f3d8d4;
+    --line:#e4dfd4;
+    --field:var(--field);
+    --chip-bg:#ffffff;
+    --track:#eeeeee;
+    --radius:16px;
+    --shadow:0 2px 14px rgba(0,0,0,.06);
+  }
+  :root[data-theme="dark"]{
+    --bg:#1d1b19;
+    --card:#28251f;
+    --ink:#ece7dd;
+    --muted:#a39b8d;
+    --accent:#dd9163;
+    --accent-soft:#3c2c20;
+    --green:#2c4a3c;
+    --green-soft:#26322b;
+    --amber:#caa24a;
+    --amber-soft:#37301d;
+    --red:#dd8a7f;
+    --red-soft:#382522;
+    --line:#3a352e;
+    --field:#211f1b;
+    --chip-bg:#322e27;
+    --track:#3a352e;
+    --shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  html{background:var(--bg)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:Georgia,"Iowan Old Style",serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.5;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 80px) env(safe-area-inset-left);
+    -webkit-text-size-adjust:100%;
+  }
+  header{
+    position:sticky;top:0;z-index:20;
+    background:var(--green);
+    color:#fff;
+    padding:14px 16px calc(14px);
+    box-shadow:0 2px 10px rgba(0,0,0,.12);
+  }
+  header h1{margin:0;font-size:1.15rem;font-weight:600;letter-spacing:.2px}
+  header p{margin:2px 0 0;font-size:.78rem;opacity:.85;font-family:system-ui,sans-serif}
+  .hwrap{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:760px;margin:0 auto}
+  .themebtn{flex:0 0 auto;background:rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:8px 11px;font-size:1.15rem;line-height:1}
+  main{max-width:760px;margin:0 auto;padding:14px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  textarea,input[type=text],input[type=password]{
+    width:100%;
+    font-family:Georgia,serif;
+    font-size:1rem;
+    color:var(--ink);
+    background:var(--field);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    resize:vertical;
+  }
+  textarea{min-height:180px;line-height:1.55}
+  label{display:block;font-family:system-ui,sans-serif;font-size:.82rem;color:var(--muted);margin:0 0 6px;font-weight:600}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > *{flex:1}
+  button{
+    font-family:system-ui,sans-serif;
+    font-size:.95rem;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    padding:13px 16px;
+    cursor:pointer;
+    background:var(--accent);
+    color:#fff;
+    transition:transform .05s ease, filter .15s ease;
+  }
+  button:active{transform:scale(.98)}
+  button.secondary{background:#efeae0;color:var(--ink);border:1px solid var(--line)}
+  button.ghost{background:transparent;color:var(--accent);padding:8px 4px}
+  button:disabled{opacity:.5;cursor:default}
+  .titlebar{font-family:system-ui,sans-serif}
+  h2{font-size:1.02rem;margin:0 0 12px}
+  .muted{color:var(--muted)}
+  .small{font-size:.82rem;font-family:system-ui,sans-serif}
+  /* essay list */
+  .essay-item{
+    display:flex;align-items:center;gap:10px;
+    padding:12px;border:1px solid var(--line);border-radius:12px;
+    margin-bottom:8px;background:var(--field);
+  }
+  .essay-item .meta{flex:1;min-width:0}
+  .essay-item .name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .essay-item .sub{font-family:system-ui,sans-serif;font-size:.76rem;color:var(--muted)}
+  .essay-item.active{border-color:var(--accent);background:var(--accent-soft)}
+  .iconbtn{flex:0 0 auto;background:transparent;color:var(--muted);padding:6px;font-size:1.1rem;border-radius:8px}
+  /* score ring */
+  .scorewrap{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+  .ring{position:relative;width:84px;height:84px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:system-ui,sans-serif}
+  .ring .val b{font-size:1.4rem;line-height:1}
+  .ring .val span{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  /* stat grid */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+  .stat{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;font-family:system-ui,sans-serif}
+  .stat b{display:block;font-size:1.25rem}
+  .stat span{font-size:.7rem;color:var(--muted)}
+  /* findings */
+  .finding{border-left:4px solid var(--line);padding:10px 12px;border-radius:0 10px 10px 0;background:var(--field);margin-bottom:8px}
+  .finding.ok{border-color:var(--green);background:var(--green-soft)}
+  .finding.warn{border-color:var(--amber);background:var(--amber-soft)}
+  .finding.bad{border-color:var(--red);background:var(--red-soft)}
+  .finding .ftitle{font-family:system-ui,sans-serif;font-weight:600;font-size:.9rem;display:flex;justify-content:space-between;gap:8px}
+  .finding .fbody{font-size:.9rem;margin-top:4px}
+  .chip{display:inline-block;background:var(--chip-bg);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin:3px 4px 0 0;font-family:system-ui,sans-serif;font-size:.78rem}
+  .chip b{color:var(--accent)}
+  .quote{font-style:italic;color:var(--muted);background:var(--chip-bg);border:1px dashed var(--line);border-radius:8px;padding:7px 9px;margin-top:6px;font-size:.88rem}
+  details{margin-top:6px}
+  summary{font-family:system-ui,sans-serif;font-size:.82rem;color:var(--accent);cursor:pointer}
+  /* tabs */
+  nav.tabs{
+    position:fixed;left:0;right:0;bottom:0;z-index:30;
+    display:flex;background:var(--card);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  nav.tabs button{
+    flex:1;background:transparent;color:var(--muted);border-radius:0;
+    padding:10px 4px 12px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:600;
+  }
+  nav.tabs button .ic{font-size:1.25rem}
+  nav.tabs button.active{color:var(--accent)}
+  .hidden{display:none}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;font-family:system-ui,sans-serif}
+  .empty .big{font-size:2.4rem}
+  .aimsg{white-space:pre-wrap;font-size:.95rem;line-height:1.55}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .notice{font-family:system-ui,sans-serif;font-size:.8rem;background:var(--amber-soft);border:1px solid #e8d2a0;border-radius:10px;padding:9px 11px;color:#6b5212}
+  .bundlebar{display:flex;gap:8px;align-items:baseline;font-family:system-ui,sans-serif;margin:4px 0 10px}
+  .bundlebar b{font-size:1.6rem;color:var(--accent)}
+  table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-size:.84rem}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.4px}
+  td.num,th.num{text-align:right}
+  a.link{color:var(--accent)}
+</style>
+<script>
+  try{
+    var _t = localStorage.getItem("essaybundel.theme")
+      || ((window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", _t);
+  }catch(e){}
+</script>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <div>
+      <h1>📝 Essaybundel Nakijker</h1>
+      <p>Controleer je essays — direct in je browser, privé.</p>
+    </div>
+    <button id="themeBtn" class="themebtn" title="Licht of donker" aria-label="Wissel licht/donker">🌙</button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ TAB: ESSAYS ============ -->
+  <section id="tab-essays">
+    <div class="card">
+      <h2 class="titlebar">Nieuw essay toevoegen</h2>
+      <label for="title">Titel</label>
+      <input type="text" id="title" placeholder="bijv. Over stilte" />
+      <label for="content" style="margin-top:10px">Tekst</label>
+      <textarea id="content" placeholder="Plak hier je essay, of laad een bestand in…"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="secondary" id="fileBtn">📄 Bestand inladen (.docx, .txt)</button>
+      </div>
+      <input type="file" id="fileInput" accept=".docx,.txt,.md,text/plain" multiple class="hidden" />
+      <p class="small muted" id="fileMsg" style="margin:6px 0 0"></p>
+      <div class="row" style="margin-top:10px">
+        <button id="addBtn">Opslaan &amp; nakijken</button>
+        <button class="secondary" id="clearInput" style="flex:0 0 auto">Wissen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h2 class="titlebar" style="margin:0">Mijn bundel</h2>
+        <span class="small muted" id="essayCount">0 essays</span>
+      </div>
+      <div id="essayList"></div>
+      <div id="essayEmpty" class="empty">
+        <div class="big">📚</div>
+        Nog geen essays. Voeg je eerste essay hierboven toe.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: NAKIJKEN ============ -->
+  <section id="tab-review" class="hidden">
+    <div id="reviewEmpty" class="empty">
+      <div class="big">🔍</div>
+      Kies een essay in "Bundel" om de analyse te zien.
+    </div>
+    <div id="reviewContent"></div>
+  </section>
+
+  <!-- ============ TAB: BUNDEL-OVERZICHT ============ -->
+  <section id="tab-overview" class="hidden">
+    <div class="card">
+      <h2 class="titlebar">Overzicht van de bundel</h2>
+      <div id="overviewBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: INSTELLINGEN / AI ============ -->
+  <section id="tab-settings" class="hidden">
+    <div class="card">
+      <h2 class="titlebar">🤖 AI-feedback (optioneel)</h2>
+      <p class="small muted">
+        De gewone controles werken zonder iets in te stellen. Wil je daarnaast inhoudelijke
+        AI-feedback (stijl, structuur, sterke/zwakke punten)? Plak dan je eigen Anthropic
+        API-sleutel. Die wordt <b>alleen op dit toestel</b> bewaard (in je browser) en
+        rechtstreeks naar Anthropic gestuurd — niet naar een server van mij.
+      </p>
+      <label for="apiKey">Anthropic API-sleutel</label>
+      <input type="password" id="apiKey" placeholder="sk-ant-…" autocomplete="off" />
+      <div class="row" style="margin-top:10px">
+        <button id="saveKey">Sleutel opslaan</button>
+        <button class="secondary" id="clearKey" style="flex:0 0 auto">Verwijderen</button>
+      </div>
+      <p class="small muted" id="keyStatus" style="margin-top:8px"></p>
+      <p class="small"><a class="link" href="https://console.anthropic.com/" target="_blank" rel="noopener">Sleutel aanmaken op console.anthropic.com →</a></p>
+    </div>
+    <div class="card">
+      <h2 class="titlebar">Over deze app</h2>
+      <p class="small muted">
+        Alles wat je hier typt blijft op je telefoon (lokale opslag van de browser). Er is geen
+        account en geen server. Exporteer je bundel af en toe als back-up — als je de
+        browsergegevens wist, ben je je essays kwijt.
+      </p>
+      <div class="row">
+        <button class="secondary" id="exportBtn">Bundel exporteren</button>
+        <button class="secondary" id="importBtn">Importeren</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json" class="hidden" />
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-tab="essays" class="active"><span class="ic">📚</span>Bundel</button>
+  <button data-tab="review"><span class="ic">🔍</span>Nakijken</button>
+  <button data-tab="overview"><span class="ic">📊</span>Overzicht</button>
+  <button data-tab="settings"><span class="ic">⚙️</span>Instellingen</button>
+</nav>
+
+<script>
+/* ============================================================
+   Opslag
+============================================================ */
+const STORE_KEY = "essaybundel.v1";
+const KEY_KEY   = "essaybundel.apikey";
+let essays = [];
+let activeId = null;
+
+function load(){
+  try{ essays = JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch(e){ essays = []; }
+}
+function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(essays)); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+/* ============================================================
+   Nederlandse taal-hulpmiddelen
+============================================================ */
+const STOPWOORDEN = new Set(("de het een en of maar want dus als toen dan ook nog wel niet geen "+
+"ik jij je u hij zij ze wij we jullie men die dat deze dit zo'n zulke "+
+"van voor met aan op in uit bij naar door over onder tussen tegen sinds tot per om "+
+"is ben bent zijn was waren wordt worden werd werden heb hebt heeft hebben had hadden "+
+"kan kun kunt kunnen kon konden zal zul zult zullen zou zouden moet moeten mocht mag "+
+"wil wilt willen wou ga gaat gaan ging mij me jou hem haar hen hun ons hen zich "+
+"er hier daar waar wie wat welk welke hoe waarom wanneer omdat doordat zodat terwijl "+
+"al alle alles iets niets iemand niemand veel weinig meer minder zeer heel erg "+
+"deze die dat dit dezelfde zelf elkaar nogal vrij toch echter immers namelijk "+
+"the a an").split(/\s+/).filter(Boolean));
+
+const VULWOORDEN = ["eigenlijk","natuurlijk","gewoon","echt","heel","erg","best","wel","even",
+"toch","misschien","eventueel","zeg maar","als het ware","een soort van","blijkbaar","kennelijk",
+"nogal","tamelijk","redelijk","ergens","zo'n beetje","enigszins","feitelijk","in feite","dus eigenlijk"];
+
+const ZWAKKE_WOORDEN = ["ding","dingen","leuk","mooi","interessant","goed","slecht","groot","klein",
+"veel","dingetje","gedoe","stuff","iets van"];
+
+const CLICHES = ["aan het einde van de dag","door dik en dun","met andere woorden","laat me dit zeggen",
+"het is wat het is","koste wat het kost","de spijker op de kop","een gegeven paard","tot slot wil ik",
+"last but not least","in een notendop","de rode draad","kort maar krachtig","tijd zal het leren"];
+
+function telLettergrepen(woord){
+  woord = woord.toLowerCase().replace(/[^a-zàâäáãéèêëíìîïóòôöõúùûüç]/g,"");
+  if(!woord) return 0;
+  // tel klinkergroepen
+  const groepen = woord.match(/[aeiouyàâäáãéèêëíìîïóòôöõúùûü]+/g);
+  let n = groepen ? groepen.length : 1;
+  return Math.max(1, n);
+}
+
+function splitsZinnen(tekst){
+  // splits op . ! ? … gevolgd door spatie/eind, houd rekening met afkortingen minimaal
+  const ruw = tekst.replace(/\s+/g," ").trim();
+  if(!ruw) return [];
+  const delen = ruw.split(/(?<=[.!?…])\s+(?=[A-ZÀ-Þ"'])/);
+  return delen.map(z=>z.trim()).filter(z=>z.length>0);
+}
+
+function woordenVan(tekst){
+  const m = tekst.toLowerCase().match(/[a-zàâäáãéèêëíìîïóòôöõúùûüç']+/g);
+  return m || [];
+}
+
+/* ============================================================
+   Analyse
+============================================================ */
+function analyseer(tekst){
+  const woorden = woordenVan(tekst);
+  const aantalWoorden = woorden.length;
+  const zinnen = splitsZinnen(tekst);
+  const aantalZinnen = zinnen.length || 1;
+  const alineas = tekst.split(/\n\s*\n/).map(a=>a.trim()).filter(Boolean).length || 1;
+  const tekens = tekst.replace(/\s/g,"").length;
+  const lettergrepen = woorden.reduce((s,w)=>s+telLettergrepen(w),0);
+  const gemZinslengte = aantalWoorden / aantalZinnen;
+  const syllPerWoord = aantalWoorden ? lettergrepen/aantalWoorden : 0;
+  const leestijd = Math.max(1, Math.round(aantalWoorden/200));
+  const uniek = new Set(woorden).size;
+  const variatie = aantalWoorden ? uniek/aantalWoorden : 0;
+
+  // Flesch-Douma (Nederlands): 206.84 − 0.77*(lettergrepen per 100 woorden) − 0.93*(woorden per zin)
+  const leesindex = 206.84 - 0.77*(syllPerWoord*100) - 0.93*gemZinslengte;
+
+  // lange zinnen
+  const langeZinnen = zinnen.map((z,i)=>({z,n:woordenVan(z).length,i}))
+                            .filter(o=>o.n>25)
+                            .sort((a,b)=>b.n-a.n);
+
+  // overmatig gebruikte inhoudswoorden
+  const freq = {};
+  for(const w of woorden){
+    if(w.length>4 && !STOPWOORDEN.has(w)) freq[w]=(freq[w]||0)+1;
+  }
+  const overmatig = Object.entries(freq).filter(([,c])=>c>=4)
+                          .sort((a,b)=>b[1]-a[1]).slice(0,12);
+
+  // vulwoorden
+  const lower = " " + tekst.toLowerCase().replace(/\s+/g," ") + " ";
+  function telFrase(frase){
+    const f = frase.toLowerCase();
+    let n=0,idx=0;
+    while((idx=lower.indexOf(" "+f+" ",idx))!==-1){ n++; idx+=f.length; }
+    // ook met leesteken erachter
+    return n;
+  }
+  const vul = VULWOORDEN.map(v=>[v,telFrase(v)]).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
+  const zwak = ZWAKKE_WOORDEN.map(v=>[v,telFrase(v)]).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
+  const clichesGevonden = CLICHES.map(v=>[v,telFrase(v)]).filter(([,n])=>n>0);
+
+  // passieve constructies (heuristiek): vormen van "worden" + voltooid deelwoord (ge…)
+  let passief = 0;
+  const passiefZinnen = [];
+  for(const z of zinnen){
+    const tw = woordenVan(z);
+    for(let i=0;i<tw.length;i++){
+      if(/^(word|wordt|worden|werd|werden|geworden)$/.test(tw[i])){
+        // zoek voltooid deelwoord verderop
+        const rest = tw.slice(i+1, i+6);
+        if(rest.some(w=>/^(ge|be|ver|ont|her)[a-z]{2,}/.test(w) || /[a-z]+(d|t|en)$/.test(w))){
+          passief++;
+          if(passiefZinnen.length<3) passiefZinnen.push(z);
+          break;
+        }
+      }
+    }
+  }
+
+  // dubbele woorden ("de de")
+  const dubbel = [];
+  for(let i=0;i<woorden.length-1;i++){
+    if(woorden[i]===woorden[i+1] && woorden[i].length>1){ dubbel.push(woorden[i]); }
+  }
+
+  return {
+    aantalWoorden, aantalZinnen, alineas, tekens, lettergrepen,
+    gemZinslengte, syllPerWoord, leestijd, uniek, variatie, leesindex,
+    langeZinnen, overmatig, vul, zwak, clichesGevonden,
+    passief, passiefZinnen, dubbel: [...new Set(dubbel)]
+  };
+}
+
+/* score 0-100: combineert leesbaarheid + zinslengte + variatie + ruis */
+function scoreVan(a){
+  let s = 100;
+  // zinslengte: ideaal 12-20
+  if(a.gemZinslengte>20) s -= Math.min(20, (a.gemZinslengte-20)*1.5);
+  if(a.gemZinslengte<8 && a.aantalWoorden>40) s -= 6;
+  // leesindex: ideaal 50-80 voor essays; te laag = stroef
+  if(a.leesindex<40) s -= 14;
+  else if(a.leesindex<50) s -= 7;
+  // variatie laag = herhalend
+  if(a.variatie<0.40 && a.aantalWoorden>120) s -= 10;
+  // ruis
+  const vulTot = a.vul.reduce((t,[,n])=>t+n,0);
+  if(a.aantalWoorden>0) s -= Math.min(16, (vulTot/a.aantalWoorden)*600);
+  const overmTot = a.overmatig.length;
+  s -= Math.min(10, overmTot*1.5);
+  // passief
+  if(a.aantalZinnen>0) s -= Math.min(10, (a.passief/a.aantalZinnen)*40);
+  if(a.dubbel.length) s -= Math.min(6, a.dubbel.length*2);
+  return Math.max(5, Math.round(s));
+}
+
+function leesindexLabel(v){
+  if(v>=80) return "heel makkelijk";
+  if(v>=60) return "makkelijk";
+  if(v>=50) return "redelijk vlot";
+  if(v>=40) return "tamelijk pittig";
+  if(v>=30) return "moeilijk";
+  return "heel moeilijk";
+}
+
+/* ============================================================
+   Rendering
+============================================================ */
+function el(html){ const t=document.createElement("template"); t.innerHTML=html.trim(); return t.content.firstChild; }
+function esc(s){ return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function renderList(){
+  const list = document.getElementById("essayList");
+  const empty = document.getElementById("essayEmpty");
+  document.getElementById("essayCount").textContent = essays.length + (essays.length===1?" essay":" essays");
+  list.innerHTML = "";
+  if(!essays.length){ empty.classList.remove("hidden"); return; }
+  empty.classList.add("hidden");
+  for(const e of essays){
+    const a = analyseer(e.content);
+    const item = el(`<div class="essay-item ${e.id===activeId?'active':''}">
+      <div class="meta">
+        <div class="name">${esc(e.title||"(zonder titel)")}</div>
+        <div class="sub">${a.aantalWoorden} woorden · score ${scoreVan(a)}</div>
+      </div>
+      <button class="iconbtn" data-act="del" title="Verwijderen">🗑️</button>
+    </div>`);
+    item.addEventListener("click",(ev)=>{
+      if(ev.target.dataset.act==="del"){
+        if(confirm("Dit essay verwijderen?")){
+          essays = essays.filter(x=>x.id!==e.id);
+          if(activeId===e.id) activeId=null;
+          save(); renderAll();
+        }
+        return;
+      }
+      activeId = e.id;
+      renderList();
+      renderReview();
+      switchTab("review");
+    });
+    list.appendChild(item);
+  }
+}
+
+function findingBlock(cls,title,rightHtml,bodyHtml){
+  return `<div class="finding ${cls}">
+    <div class="ftitle"><span>${title}</span><span>${rightHtml||""}</span></div>
+    ${bodyHtml?`<div class="fbody">${bodyHtml}</div>`:""}
+  </div>`;
+}
+
+function renderReview(){
+  const wrap = document.getElementById("reviewContent");
+  const empty = document.getElementById("reviewEmpty");
+  const e = essays.find(x=>x.id===activeId);
+  if(!e){ empty.classList.remove("hidden"); wrap.innerHTML=""; return; }
+  empty.classList.add("hidden");
+  const a = analyseer(e.content);
+  const score = scoreVan(a);
+  const ringColor = score>=75?"var(--green)":score>=55?"var(--amber)":"var(--red)";
+  const circ = 2*Math.PI*36;
+  const off = circ*(1-score/100);
+
+  let findings = "";
+
+  // zinslengte
+  if(a.gemZinslengte>22){
+    findings += findingBlock("warn","Lange zinnen",`gem. ${a.gemZinslengte.toFixed(1)} woorden`,
+      `Je zinnen zijn vrij lang. Overweeg om de langste op te knippen.` +
+      (a.langeZinnen.length?`<details><summary>Toon ${a.langeZinnen.length} lange zin(nen)</summary>`+
+        a.langeZinnen.slice(0,4).map(o=>`<div class="quote">(${o.n} woorden) ${esc(o.z)}</div>`).join("")+`</details>`:""));
+  } else {
+    findings += findingBlock("ok","Zinslengte in balans",`gem. ${a.gemZinslengte.toFixed(1)} woorden`,"");
+  }
+
+  // leesbaarheid
+  const lcls = a.leesindex>=50?"ok":a.leesindex>=40?"warn":"bad";
+  findings += findingBlock(lcls,"Leesbaarheid",`${Math.round(a.leesindex)} · ${leesindexLabel(a.leesindex)}`,
+    `Flesch-Douma leesindex (hoger = vlotter leesbaar).`);
+
+  // woordvariatie
+  if(a.variatie<0.40 && a.aantalWoorden>120){
+    findings += findingBlock("warn","Weinig woordvariatie",`${Math.round(a.variatie*100)}% uniek`,
+      "Veel herhaling van dezelfde woorden. Varieer je woordkeus voor meer ritme.");
+  }
+
+  // overmatig gebruikte woorden
+  if(a.overmatig.length){
+    findings += findingBlock("warn","Vaak herhaalde woorden","",
+      a.overmatig.map(([w,c])=>`<span class="chip">${esc(w)} <b>${c}×</b></span>`).join(""));
+  }
+
+  // vulwoorden
+  if(a.vul.length){
+    const tot = a.vul.reduce((t,[,n])=>t+n,0);
+    findings += findingBlock(tot>5?"warn":"ok","Vul- en stopwoorden",`${tot}×`,
+      a.vul.map(([w,c])=>`<span class="chip">${esc(w)} <b>${c}×</b></span>`).join("") +
+      `<div class="small muted" style="margin-top:6px">Vaak kun je deze schrappen zonder betekenisverlies.</div>`);
+  }
+
+  // zwakke woorden
+  if(a.zwak.length){
+    findings += findingBlock("warn","Vage of zwakke woorden","",
+      a.zwak.map(([w,c])=>`<span class="chip">${esc(w)} <b>${c}×</b></span>`).join("") +
+      `<div class="small muted" style="margin-top:6px">Maak concreter: wélk ding, wát maakt het mooi?</div>`);
+  }
+
+  // passief
+  if(a.passief>0){
+    findings += findingBlock(a.passief>=3?"warn":"ok","Lijdende vorm",`${a.passief}×`,
+      `Constructies met "worden". Actieve zinnen zijn vaak directer.` +
+      (a.passiefZinnen.length?`<details><summary>Voorbeelden</summary>`+
+        a.passiefZinnen.map(z=>`<div class="quote">${esc(z)}</div>`).join("")+`</details>`:""));
+  }
+
+  // clichés
+  if(a.clichesGevonden.length){
+    findings += findingBlock("warn","Mogelijke clichés","",
+      a.clichesGevonden.map(([w,c])=>`<span class="chip">${esc(w)} <b>${c}×</b></span>`).join(""));
+  }
+
+  // dubbele woorden
+  if(a.dubbel.length){
+    findings += findingBlock("bad","Dubbel getypte woorden","",
+      a.dubbel.map(w=>`<span class="chip">${esc(w)} ${esc(w)}</span>`).join(""));
+  }
+
+  if(!findings.includes("warn") && !findings.includes("bad")){
+    findings = findingBlock("ok","Netjes!","","Geen duidelijke aandachtspunten gevonden in de directe controle.") + findings;
+  }
+
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="scorewrap">
+        <div class="ring">
+          <svg width="84" height="84">
+            <circle cx="42" cy="42" r="36" fill="none" style="stroke:var(--track)" stroke-width="8"/>
+            <circle cx="42" cy="42" r="36" fill="none" style="stroke:${ringColor}" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${off}"/>
+          </svg>
+          <div class="val"><b>${score}</b><span>score</span></div>
+        </div>
+        <div style="flex:1">
+          <div class="titlebar" style="font-weight:600;font-size:1.05rem">${esc(e.title||"(zonder titel)")}</div>
+          <div class="small muted">${a.aantalWoorden} woorden · ${a.aantalZinnen} zinnen · ~${a.leestijd} min lezen</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>${a.aantalWoorden}</b><span>woorden</span></div>
+        <div class="stat"><b>${a.alineas}</b><span>alinea's</span></div>
+        <div class="stat"><b>${a.gemZinslengte.toFixed(1)}</b><span>woorden/zin</span></div>
+        <div class="stat"><b>${Math.round(a.leesindex)}</b><span>leesindex</span></div>
+        <div class="stat"><b>${Math.round(a.variatie*100)}%</b><span>woordvariatie</span></div>
+        <div class="stat"><b>~${a.leestijd}</b><span>min lezen</span></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="secondary" id="exportDocxBtn">⬇️ Exporteer als .docx</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="titlebar">Aandachtspunten</h2>
+      ${findings}
+    </div>
+
+    <div class="card">
+      <h2 class="titlebar">🤖 Inhoudelijke AI-feedback</h2>
+      <p class="small muted">Stijl, structuur en sterke/zwakke punten — beoordeeld door Claude.</p>
+      <div class="row">
+        <button id="aiBtn">Vraag AI-feedback</button>
+      </div>
+      <div id="aiOut" style="margin-top:12px"></div>
+    </div>
+  `;
+
+  document.getElementById("aiBtn").addEventListener("click",()=>vraagAI(e,a));
+  document.getElementById("exportDocxBtn").addEventListener("click",()=>exportDocx(e));
+}
+
+function renderOverview(){
+  const body = document.getElementById("overviewBody");
+  if(!essays.length){
+    body.innerHTML = `<div class="empty"><div class="big">📊</div>Nog geen essays om te overzien.</div>`;
+    return;
+  }
+  let totW=0, totScore=0, rows="";
+  const analyses = essays.map(e=>({e,a:analyseer(e.content)}));
+  for(const {e,a} of analyses){
+    const sc = scoreVan(a);
+    totW += a.aantalWoorden; totScore += sc;
+    const col = sc>=75?"var(--green)":sc>=55?"var(--amber)":"var(--red)";
+    rows += `<tr>
+      <td>${esc(e.title||"(zonder titel)")}</td>
+      <td class="num">${a.aantalWoorden}</td>
+      <td class="num">${Math.round(a.leesindex)}</td>
+      <td class="num" style="color:${col};font-weight:700">${sc}</td>
+    </tr>`;
+  }
+  const gemScore = Math.round(totScore/essays.length);
+  body.innerHTML = `
+    <div class="bundlebar"><b>${essays.length}</b><span>essays</span>
+      &nbsp;·&nbsp; <b>${totW.toLocaleString("nl-NL")}</b><span>woorden totaal</span>
+      &nbsp;·&nbsp; <b>${gemScore}</b><span>gem. score</span></div>
+    <table>
+      <thead><tr><th>Titel</th><th class="num">Woorden</th><th class="num">Leesindex</th><th class="num">Score</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="small muted" style="margin-top:10px">Tip: tik op een essay in "Bundel" voor de volledige analyse.</p>
+  `;
+}
+
+function renderAll(){ renderList(); renderReview(); renderOverview(); }
+
+/* ============================================================
+   AI-feedback (optioneel, eigen API-sleutel, direct naar Anthropic)
+============================================================ */
+async function vraagAI(e,a){
+  const out = document.getElementById("aiOut");
+  const key = localStorage.getItem(KEY_KEY);
+  if(!key){
+    out.innerHTML = `<div class="notice">Geen API-sleutel ingesteld. Ga naar <b>Instellingen</b> om AI-feedback aan te zetten. De gewone controles werken ook zonder.</div>`;
+    return;
+  }
+  const btn = document.getElementById("aiBtn");
+  btn.disabled = true;
+  out.innerHTML = `<div class="aimsg"><span class="spinner"></span>Claude leest je essay…</div>`;
+
+  const prompt =
+`Je bent een ervaren, vriendelijke essayredacteur. Geef beknopte, bruikbare feedback in het Nederlands op het onderstaande essay. Gebruik deze structuur met korte kopjes:
+
+1. Eerste indruk (2-3 zinnen)
+2. Sterke punten (max 3 bullets)
+3. Aandachtspunten (max 4 bullets, concreet en met een suggestie)
+4. Eén concrete herschrijftip voor de zwakste zin of passage
+
+Houd het warm en aanmoedigend maar eerlijk. Verzin geen feiten.
+
+Titel: ${e.title||"(zonder titel)"}
+
+Essay:
+"""
+${e.content.slice(0,12000)}
+"""`;
+
+  try{
+    const res = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{
+        "content-type":"application/json",
+        "x-api-key":key,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body:JSON.stringify({
+        model:"claude-opus-4-8",
+        max_tokens:1200,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    if(!res.ok){
+      let msg = "Er ging iets mis ("+res.status+").";
+      try{ const j=await res.json(); if(j.error&&j.error.message) msg+=" "+j.error.message; }catch(_){}
+      if(res.status===401) msg="Sleutel ongeldig of niet geautoriseerd. Controleer hem in Instellingen.";
+      out.innerHTML = `<div class="notice">${esc(msg)}</div>`;
+      btn.disabled=false; return;
+    }
+    const data = await res.json();
+    const txt = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n").trim()
+                || "(geen antwoord ontvangen)";
+    out.innerHTML = `<div class="aimsg">${esc(txt)}</div>`;
+  }catch(err){
+    out.innerHTML = `<div class="notice">Kon Claude niet bereiken. Controleer je internetverbinding. (${esc(String(err.message||err))})</div>`;
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+/* ============================================================
+   Tabs
+============================================================ */
+function switchTab(name){
+  for(const s of ["essays","review","overview","settings"]){
+    document.getElementById("tab-"+s).classList.toggle("hidden", s!==name);
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.tab===name);
+  });
+  if(name==="overview") renderOverview();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>{
+  b.addEventListener("click",()=>switchTab(b.dataset.tab));
+});
+
+/* ============================================================
+   Acties
+============================================================ */
+function addEssay(title, content){
+  const e = {id:uid(), title:(title||"").trim()||"(zonder titel)", content, created:Date.now()};
+  essays.unshift(e);
+  return e;
+}
+
+document.getElementById("addBtn").addEventListener("click",()=>{
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
+  if(!content){ alert("Plak eerst wat tekst."); return; }
+  const e = addEssay(title, content);
+  save();
+  document.getElementById("title").value="";
+  document.getElementById("content").value="";
+  activeId = e.id;
+  renderAll();
+  renderReview();
+  switchTab("review");
+});
+document.getElementById("clearInput").addEventListener("click",()=>{
+  document.getElementById("title").value="";
+  document.getElementById("content").value="";
+  document.getElementById("fileMsg").textContent="";
+});
+
+/* ---- bestanden inladen (.docx, .txt, .md) ---- */
+let mammothPromise=null;
+function loadMammoth(){
+  if(window.mammoth) return Promise.resolve(window.mammoth);
+  if(mammothPromise) return mammothPromise;
+  mammothPromise = new Promise((resolve,reject)=>{
+    const s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js";
+    s.onload=()=>resolve(window.mammoth);
+    s.onerror=()=>{ mammothPromise=null; reject(new Error("kon de .docx-lezer niet laden — de eerste keer is internet nodig")); };
+    document.head.appendChild(s);
+  });
+  return mammothPromise;
+}
+function baseName(name){ return name.replace(/\.[^.]+$/,""); }
+
+/* zet de HTML van mammoth om naar platte tekst met behoud van alinea's */
+function htmlNaarTekst(html){
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const blokken = [...doc.body.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,blockquote,tr")];
+  let delen;
+  if(blokken.length){
+    delen = blokken.map(b=>b.textContent.replace(/\s+/g," ").trim()).filter(Boolean);
+  }else{
+    delen = [doc.body.textContent.replace(/\s+\n/g,"\n").trim()];
+  }
+  return delen.join("\n\n");
+}
+
+async function leesBestand(file){
+  const naam = file.name.toLowerCase();
+  if(naam.endsWith(".docx")){
+    const mammoth = await loadMammoth();
+    const buf = await file.arrayBuffer();
+    const res = await mammoth.convertToHtml({arrayBuffer:buf});
+    return htmlNaarTekst(res.value||"").trim();
+  }
+  if(naam.endsWith(".doc")){
+    throw new Error("oude .doc-bestanden worden niet ondersteund — bewaar als .docx of .txt");
+  }
+  // .txt, .md en overige als platte tekst
+  return (await file.text()).trim();
+}
+
+document.getElementById("fileBtn").addEventListener("click",()=>document.getElementById("fileInput").click());
+document.getElementById("fileInput").addEventListener("change", async (ev)=>{
+  const files=[...ev.target.files];
+  ev.target.value="";
+  if(!files.length) return;
+  const msg=document.getElementById("fileMsg");
+  const titleEl=document.getElementById("title");
+  const contentEl=document.getElementById("content");
+  msg.textContent="Bezig met inlezen…";
+  try{
+    if(files.length===1 && !contentEl.value.trim()){
+      // één bestand: vul het formulier zodat je het nog kunt nakijken
+      const tekst=await leesBestand(files[0]);
+      if(!tekst){ msg.textContent="Geen tekst gevonden in dit bestand."; return; }
+      if(!titleEl.value.trim()) titleEl.value=baseName(files[0].name);
+      contentEl.value=tekst;
+      msg.textContent="Ingeladen — controleer en tik op “Opslaan & nakijken”.";
+    }else{
+      // meerdere bestanden: direct aan de bundel toevoegen
+      let n=0, fouten=[];
+      for(const f of files){
+        try{
+          const tekst=await leesBestand(f);
+          if(tekst){ addEssay(baseName(f.name), tekst); n++; }
+        }catch(e){ fouten.push(f.name); }
+      }
+      save(); renderAll();
+      msg.textContent = n+" essay(s) toegevoegd" + (fouten.length?` · overgeslagen: ${fouten.join(", ")}`:"") + ".";
+      if(n) switchTab("essays");
+    }
+  }catch(err){
+    msg.textContent="Kon het bestand niet lezen: "+(err.message||err);
+  }
+});
+
+/* sleutel */
+function refreshKeyStatus(){
+  const k = localStorage.getItem(KEY_KEY);
+  document.getElementById("keyStatus").textContent = k ? "✓ Sleutel opgeslagen op dit toestel." : "Nog geen sleutel ingesteld.";
+  if(k) document.getElementById("apiKey").value = "";
+}
+document.getElementById("saveKey").addEventListener("click",()=>{
+  const k = document.getElementById("apiKey").value.trim();
+  if(!k){ alert("Plak eerst je sleutel."); return; }
+  localStorage.setItem(KEY_KEY,k);
+  refreshKeyStatus();
+  alert("Sleutel opgeslagen.");
+});
+document.getElementById("clearKey").addEventListener("click",()=>{
+  localStorage.removeItem(KEY_KEY);
+  document.getElementById("apiKey").value="";
+  refreshKeyStatus();
+});
+
+/* export / import */
+document.getElementById("exportBtn").addEventListener("click",()=>{
+  const blob = new Blob([JSON.stringify(essays,null,2)],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download="essaybundel-backup.json"; a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change",ev=>{
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const arr = JSON.parse(r.result);
+      if(!Array.isArray(arr)) throw new Error("verkeerd formaat");
+      // voeg toe, vermijd dubbele id's
+      const have = new Set(essays.map(e=>e.id));
+      let added=0;
+      for(const e of arr){
+        if(e && e.content){
+          if(have.has(e.id)) e.id = uid();
+          essays.push({id:e.id||uid(), title:e.title||"(zonder titel)", content:e.content, created:e.created||Date.now()});
+          added++;
+        }
+      }
+      save(); renderAll();
+      alert(added+" essay(s) geïmporteerd.");
+    }catch(err){ alert("Kon bestand niet lezen: "+err.message); }
+  };
+  r.readAsText(f);
+});
+
+/* ============================================================
+   Exporteren naar .docx (eigen ZIP-schrijver, geen bibliotheek)
+============================================================ */
+const _crcTable=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(bytes){let c=0xFFFFFFFF;for(let i=0;i<bytes.length;i++)c=_crcTable[(c^bytes[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+
+function maakZip(bestanden){
+  const enc=new TextEncoder();
+  const u16=n=>[n&0xFF,(n>>>8)&0xFF];
+  const u32=n=>[n&0xFF,(n>>>8)&0xFF,(n>>>16)&0xFF,(n>>>24)&0xFF];
+  const stukken=[], centraal=[]; let offset=0;
+  for(const f of bestanden){
+    const naam=enc.encode(f.name);
+    const data=(f.data instanceof Uint8Array)?f.data:enc.encode(f.data);
+    const crc=crc32(data), size=data.length;
+    const lokaal=new Uint8Array([].concat(u32(0x04034b50),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(size),u32(size),u16(naam.length),u16(0)));
+    stukken.push(lokaal,naam,data);
+    centraal.push(new Uint8Array([].concat(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(size),u32(size),u16(naam.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset))), naam);
+    offset+=lokaal.length+naam.length+data.length;
+  }
+  const centraalStart=offset; let centraalGrootte=0;
+  for(const c of centraal) centraalGrootte+=c.length;
+  const eind=new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(bestanden.length),u16(bestanden.length),u32(centraalGrootte),u32(centraalStart),u16(0)));
+  const alles=[...stukken,...centraal,eind];
+  let totaal=alles.reduce((s,a)=>s+a.length,0);
+  const out=new Uint8Array(totaal); let p=0;
+  for(const a of alles){ out.set(a,p); p+=a.length; }
+  return out;
+}
+
+function _escXml(s){ return s.replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&apos;",'"':"&quot;"}[c])); }
+function docxDocumentXml(title, content){
+  const paras=[];
+  if(title){
+    paras.push(`<w:p><w:pPr><w:spacing w:after="240"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="32"/></w:rPr><w:t xml:space="preserve">${_escXml(title)}</w:t></w:r></w:p>`);
+  }
+  const blokken=(content||"").split(/\n\s*\n/);
+  for(const b of blokken){
+    const regels=b.split(/\n/);
+    const runs=regels.map((ln,i)=>`${i>0?'<w:br/>':''}<w:t xml:space="preserve">${_escXml(ln)}</w:t>`).join("");
+    paras.push(`<w:p><w:pPr><w:spacing w:after="160" w:line="276" w:lineRule="auto"/></w:pPr><w:r>${runs}</w:r></w:p>`);
+  }
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paras.join("")}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`;
+}
+const _DOCX_CONTENT_TYPES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
+const _DOCX_RELS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+
+function exportDocx(e){
+  try{
+    const zip=maakZip([
+      {name:"[Content_Types].xml", data:_DOCX_CONTENT_TYPES},
+      {name:"_rels/.rels", data:_DOCX_RELS},
+      {name:"word/document.xml", data:docxDocumentXml(e.title, e.content)}
+    ]);
+    const blob=new Blob([zip],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=((e.title||"essay").replace(/[\\/:*?"<>|]+/g,"_").trim()||"essay")+".docx";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(err){
+    alert("Kon het .docx-bestand niet maken: "+(err.message||err));
+  }
+}
+
+/* ============================================================
+   Thema (licht / donker)
+============================================================ */
+const THEME_KEY="essaybundel.theme";
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  const btn=document.getElementById("themeBtn");
+  if(btn) btn.textContent = t==="dark" ? "☀️" : "🌙";
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute("content", t==="dark" ? "#26322b" : "#2f4f4f");
+}
+let theme = localStorage.getItem(THEME_KEY)
+  || ((window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light");
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  theme = theme==="dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, theme);
+  applyTheme(theme);
+});
+
+/* ============================================================
+   Start
+============================================================ */
+applyTheme(theme);
+load();
+refreshKeyStatus();
+renderAll();
+</script>
+</body>
+</html>

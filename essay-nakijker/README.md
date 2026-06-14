@@ -6,6 +6,8 @@ browser: niets installeren, geen account, en je teksten blijven op je eigen toes
 ## Wat doet het?
 
 **Directe controles (gratis, werkt zonder internet en zonder API-sleutel):**
+- Essays inladen uit **.docx**- en **.txt**-bestanden (of gewoon plakken); meerdere
+  tegelijk komen meteen in je bundel
 - Woord-, zin- en alineatelling + geschatte leestijd
 - Leesbaarheidsscore (Flesch-Douma, aangepast voor het Nederlands)
 - Lange zinnen die je kunt opknippen

@@ -16,6 +16,8 @@ browser: niets installeren, geen account, en je teksten blijven op je eigen toes
 - Vage/zwakke woorden, mogelijke clichés en lijdende vorm
 - Dubbel getypte woorden
 - Eén overzichtsscore per essay + een tabel over de hele bundel
+- Een essay **exporteren naar .docx** (Word-bestand)
+- **Licht/donker-modus** (volgt je systeemvoorkeur, met een knop rechtsboven)
 
 **Optionele AI-feedback (inhoudelijk):**
 - Stijl, structuur en sterke/zwakke punten, beoordeeld door Claude

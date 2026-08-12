@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="nl" style="background-color: #f5eef5 !important;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
+    <title>Tekstschoonmaker — Kaatje Gijbels</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root { color-scheme: light only; --bg: #f5eef5; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { background: #f5eef5 !important; min-height: 100%; }
+        body {
+            font-family: 'Playfair Display', Georgia, serif;
+            background: #f5eef5 !important;
+            color: #000;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        ::selection { background: #7fff00; }
+        a { color: inherit; }
+
+        main { max-width: 800px; margin: 0 auto; padding: 30px 25px 80px; }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 0.95;
+            margin-bottom: 8px;
+        }
+        .ondertitel {
+            font-family: 'Caveat', cursive;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .terug {
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            border-bottom: 1px solid #000;
+        }
+
+        .uitleg {
+            font-size: 15px;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(0,0,0,0.15);
+            padding: 14px 16px;
+            margin-bottom: 28px;
+        }
+        .uitleg strong { font-weight: 700; }
+
+        label.veldlabel {
+            display: block;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            font-family: Georgia, serif;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 12px;
+            border: 1px solid rgba(0,0,0,0.35);
+            background: #fff;
+            color: #000;
+            resize: vertical;
+        }
+        textarea:focus { outline: 2px solid #7fff00; }
+
+        .opties {
+            margin: 22px 0 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+            font-size: 15px;
+        }
+        @media (max-width: 620px) { .opties { grid-template-columns: 1fr; } }
+        .opties label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+        .opties input { margin-top: 4px; accent-color: #000; }
+
+        button {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 17px;
+            font-weight: 700;
+            padding: 10px 22px;
+            background: #000;
+            color: #f5eef5;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: #333; }
+        button.secundair {
+            background: transparent;
+            color: #000;
+            border: 1px solid #000;
+        }
+        .knoppen { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 28px; }
+
+        .rapport {
+            font-size: 15px;
+            margin: 24px 0;
+        }
+        .rapport h2 { font-size: 22px; margin-bottom: 10px; letter-spacing: -0.5px; }
+        .rapport table { border-collapse: collapse; width: 100%; background: #fff; }
+        .rapport th, .rapport td {
+            border: 1px solid rgba(0,0,0,0.25);
+            padding: 6px 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .rapport th { font-weight: 700; background: rgba(0,0,0,0.05); }
+        .rapport .schoon {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+        }
+        .aantal { font-variant-numeric: tabular-nums; text-align: right; }
+
+        .resultaatblok { margin-top: 28px; }
+        .kopie-ok {
+            font-family: 'Caveat', cursive;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .kopie-ok.zichtbaar { opacity: 1; }
+
+        footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 25px 40px;
+            font-size: 13px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <a class="terug" href="index.html">&larr; terug naar kaatjegijbels.nl</a>
+    <h1>Tekstschoonmaker</h1>
+    <p class="ondertitel">haalt de AI-sporen uit je tekst — alles blijft op je eigen computer</p>
+
+    <div class="uitleg">
+        <strong>Eerlijk vooraf:</strong> Claude voegt g&eacute;&eacute;n verborgen watermerk toe aan tekst.
+        Wat er w&eacute;l in geplakte AI-tekst kan zitten, zijn herkenbare typografische sporen:
+        onzichtbare Unicode-tekens, speciale spaties, slimme aanhalingstekens, kastlijntjes (&mdash;)
+        en restjes Markdown-opmaak. Deze pagina detecteert en verwijdert precies die sporen.
+        Er wordt niets verstuurd of opgeslagen: alles gebeurt in je browser.
+    </div>
+
+    <label class="veldlabel" for="invoer">Plak hier je tekst</label>
+    <textarea id="invoer" spellcheck="false" placeholder="Plak de tekst die je wil schoonmaken&hellip;"></textarea>
+
+    <div class="opties">
+        <label><input type="checkbox" id="opt-onzichtbaar" checked>
+            Onzichtbare tekens verwijderen (zero-width spaties, soft hyphens, BOM, richtingstekens)</label>
+        <label><input type="checkbox" id="opt-spaties" checked>
+            Speciale spaties vervangen door gewone spaties (harde spatie, smalle spatie, e.d.)</label>
+        <label><input type="checkbox" id="opt-quotes" checked>
+            Slimme aanhalingstekens (&ldquo; &rdquo; &lsquo; &rsquo;) vervangen door rechte (" ')</label>
+        <label><input type="checkbox" id="opt-streepjes">
+            Kastlijntjes (&mdash;) en halve kastlijntjes (&ndash;) vervangen door een streepje met spaties</label>
+        <label><input type="checkbox" id="opt-ellips" checked>
+            Beletselteken (&hellip;) vervangen door drie punten (...)</label>
+        <label><input type="checkbox" id="opt-markdown">
+            Markdown-opmaak verwijderen (**vet**, *cursief*, ## koppen, opsommingstekens)</label>
+    </div>
+
+    <div class="knoppen">
+        <button id="schoonmaken">Maak schoon</button>
+        <button id="kopieer" class="secundair">Kopieer resultaat</button>
+        <span class="kopie-ok" id="kopie-ok">gekopieerd!</span>
+    </div>
+
+    <div class="rapport" id="rapport" hidden>
+        <h2>Wat er gevonden werd</h2>
+        <div id="rapport-inhoud"></div>
+    </div>
+
+    <div class="resultaatblok">
+        <label class="veldlabel" for="uitvoer">Schone tekst</label>
+        <textarea id="uitvoer" spellcheck="false" placeholder="Hier verschijnt de schoongemaakte tekst&hellip;"></textarea>
+    </div>
+</main>
+
+<footer>
+    Deze pagina werkt volledig in je browser; je tekst verlaat je computer niet.
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    // Elke regel: [naam, regex, vervanging]. Alle bijzondere tekens staan als
+    // \u-escapes zodat dit bestand zelf geen onzichtbare of "slimme" tekens bevat.
+    var ONZICHTBAAR = [
+        ['zero-width spatie (U+200B)', /\u200B/g, ''],
+        ['zero-width non-joiner (U+200C)', /\u200C/g, ''],
+        ['zero-width joiner (U+200D)', /\u200D/g, ''],
+        ['word joiner (U+2060)', /\u2060/g, ''],
+        ['byte order mark (U+FEFF)', /\uFEFF/g, ''],
+        ['soft hyphen (U+00AD)', /\u00AD/g, ''],
+        ['richtingstekens (LRM/RLM en bidi-controls)', /[\u200E\u200F\u202A-\u202E\u2066-\u2069\u061C]/g, ''],
+        ['variatieselectors (U+FE00\u2013U+FE0F)', /[\uFE00-\uFE0F]/g, '']
+    ];
+
+    var SPATIES = [
+        ['harde spatie (U+00A0)', /\u00A0/g, ' '],
+        ['smalle harde spatie (U+202F)', /\u202F/g, ' '],
+        ['typografische spaties (U+2000\u2013U+200A)', /[\u2000-\u200A]/g, ' '],
+        ['ideografische spatie (U+3000)', /\u3000/g, ' ']
+    ];
+
+    var QUOTES = [
+        ['slimme dubbele aanhalingstekens (\u201C \u201D \u201E)', /[\u201C\u201D\u201E\u201F\u00AB\u00BB]/g, '"'],
+        ['slimme enkele aanhalingstekens (\u2018 \u2019 \u201A)', /[\u2018\u2019\u201A\u201B\u2039\u203A]/g, "'"]
+    ];
+
+    var STREEPJES = [
+        ['kastlijntje (\u2014)', /\s*\u2014\s*/g, ' - '],
+        ['half kastlijntje (\u2013)', /\s*\u2013\s*/g, ' - '],
+        ['horizontale balk (\u2015)', /\s*\u2015\s*/g, ' - ']
+    ];
+
+    var ELLIPS = [
+        ['beletselteken (\u2026)', /\u2026/g, '...']
+    ];
+
+    var MARKDOWN = [
+        ['vet-markering (** en __)', /(\*\*|__)(.*?)\1/g, '$2'],
+        ['cursief-markering (*tekst*)', /(^|[\s(])\*([^*\n]+)\*(?=[\s).,!?:;]|$)/gm, '$1$2'],
+        ['cursief-markering (_tekst_)', /(^|[\s(])_([^_\n]+)_(?=[\s).,!?:;]|$)/gm, '$1$2'],
+        ['kop-hekjes (## )', /^#{1,6}\s+/gm, ''],
+        ['opsommingstekens (\u2022 aan regelbegin)', /^[ \t]*[\u2022\u25E6\u2043\u2219]\s+/gm, ''],
+        ['inline-code-backticks (`tekst`)', /`([^`\n]+)`/g, '$1']
+    ];
+
+    function pasToe(tekst, regels, rapport) {
+        regels.forEach(function (regel) {
+            var naam = regel[0], patroon = regel[1], vervanging = regel[2];
+            var matches = tekst.match(patroon);
+            if (matches && matches.length) {
+                rapport.push({ naam: naam, aantal: matches.length });
+                tekst = tekst.replace(patroon, vervanging);
+            }
+        });
+        return tekst;
+    }
+
+    function schoonmaken() {
+        var tekst = document.getElementById('invoer').value;
+        var rapport = [];
+
+        if (document.getElementById('opt-onzichtbaar').checked) tekst = pasToe(tekst, ONZICHTBAAR, rapport);
+        if (document.getElementById('opt-spaties').checked) tekst = pasToe(tekst, SPATIES, rapport);
+        if (document.getElementById('opt-quotes').checked) tekst = pasToe(tekst, QUOTES, rapport);
+        if (document.getElementById('opt-streepjes').checked) tekst = pasToe(tekst, STREEPJES, rapport);
+        if (document.getElementById('opt-ellips').checked) tekst = pasToe(tekst, ELLIPS, rapport);
+        if (document.getElementById('opt-markdown').checked) tekst = pasToe(tekst, MARKDOWN, rapport);
+
+        // Dubbele spaties die door vervangingen kunnen ontstaan samenvoegen,
+        // maar regeleindes en inspringing met rust laten.
+        tekst = tekst.replace(/ {2,}/g, ' ').replace(/ +$/gm, '');
+
+        document.getElementById('uitvoer').value = tekst;
+        toonRapport(rapport);
+    }
+
+    function toonRapport(rapport) {
+        var blok = document.getElementById('rapport');
+        var inhoud = document.getElementById('rapport-inhoud');
+        blok.hidden = false;
+
+        if (!rapport.length) {
+            inhoud.innerHTML = '<p class="schoon">Niets gevonden \u2014 deze tekst was al schoon.</p>';
+            return;
+        }
+
+        var html = '<table><tr><th>Gevonden</th><th class="aantal">Aantal</th></tr>';
+        rapport.forEach(function (r) {
+            html += '<tr><td>' + r.naam + '</td><td class="aantal">' + r.aantal + '</td></tr>';
+        });
+        html += '</table>';
+        inhoud.innerHTML = html;
+    }
+
+    function kopieer() {
+        var uitvoer = document.getElementById('uitvoer');
+        if (!uitvoer.value) return;
+        navigator.clipboard.writeText(uitvoer.value).then(function () {
+            var ok = document.getElementById('kopie-ok');
+            ok.classList.add('zichtbaar');
+            setTimeout(function () { ok.classList.remove('zichtbaar'); }, 1800);
+        });
+    }
+
+    document.getElementById('schoonmaken').addEventListener('click', schoonmaken);
+    document.getElementById('kopieer').addEventListener('click', kopieer);
+
+    // Automatisch schoonmaken bij plakken, zodat het resultaat meteen klaarstaat.
+    document.getElementById('invoer').addEventListener('paste', function () {
+        setTimeout(schoonmaken, 0);
+    });
+})();
+</script>
+</body>
+</html>
